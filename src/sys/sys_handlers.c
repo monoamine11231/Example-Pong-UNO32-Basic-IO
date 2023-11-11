@@ -99,9 +99,37 @@ void _on_bootstrap() {
 	spi_send_recv(0xDA);
 	spi_send_recv(0x20);
 	
+	spi_send_recv(0x20);
+	spi_send_recv(0x0);
+
 	spi_send_recv(0xAF);
+	quicksleep(1000);
 
     /* CLEAR TEXT BUFFER!! */
-	clear_textbuffer();
-    flush_textbuffer();
+	clear_video();
+	flush_video();
+
+	TRISFSET = 0x02;
+	TRISDSET = (0b1111111 << 5);
+
+	/* PORTB.2 is analog pin with potentiometer*/
+	AD1PCFG = ~(1 << 2);
+	TRISBSET = (1 << 2);
+	/* Use pin 2 for positive */
+	AD1CHS = (0x2 << 16);
+	
+	/* Data format in uint32, 0 - 1024
+	Manual sampling, auto conversion when sampling is done
+	FORM = 0x4; SSRC = 0x7; CLRASAM = 0x0; ASAM = 0x0; */
+	AD1CON1 = (0x4 << 8) | (0x7 << 5);
+	
+	AD1CON2 = 0x0;
+	AD1CON3 |= (0x1 << 15);
+	
+	/* Set up output pins */
+	ODCE = 0x0;
+	TRISECLR = 0xFF;
+	
+	/* Turn on ADC */
+	AD1CON1 |= (0x1 << 15);
 }

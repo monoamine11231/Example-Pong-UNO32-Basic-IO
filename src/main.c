@@ -1,11 +1,11 @@
-#include "sys_utils.h"
+#include <pic32mx.h>
+#include "gui.h"
 
 
 #define EXIT_LOOP for(;;) {}
 
 int main() {
-    update_textbuffer(1, 4, "Jag gillar bullar!");
-    flush_textbuffer();
+    render_intro();
 
     EXIT_LOOP;
     return 0;
