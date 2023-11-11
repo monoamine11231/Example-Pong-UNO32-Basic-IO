@@ -21,9 +21,9 @@ HEXFILE		= $(PROGNAME).hex
 LINKSCRIPT	:= p$(shell echo "$(DEVICE)" | tr '[:upper:]' '[:lower:]').ld
 
 # Find all source files automatically
-CFILES      = $(wildcard *.c)
-ASFILES     = $(wildcard *.S)
-SYMSFILES	= $(wildcard *.syms)
+CFILES      = $(shell find src -type f -regex ".*\.c")
+ASFILES     = $(shell find src -type f -regex ".*\.S")
+SYMSFILES	= $(shell find src -type f -regex ".*\.syms")
 
 # Object file names
 OBJFILES    = $(CFILES:.c=.c.o)
@@ -33,7 +33,7 @@ OBJFILES	+=$(SYMSFILES:.syms=.syms.o)
 all: $(HEXFILE)
 
 bulle:
-	@echo $(DEVICE)
+	@echo $(CFILES)
 
 clean: 
 	$(RM) $(HEXFILE) $(ELFFILE) $(OBJFILES) *.d

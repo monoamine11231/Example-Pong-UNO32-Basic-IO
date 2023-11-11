@@ -10,6 +10,7 @@ uint8_t spi_send_recv(uint8_t data);
 
 void update_textbuffer(int line, int offset, char *string);
 void flush_textbuffer(void);
+void clear_textbuffer(void);
 
 
 char textbuffer[4][16];

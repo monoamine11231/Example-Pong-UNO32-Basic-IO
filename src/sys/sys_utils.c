@@ -55,3 +55,12 @@ void flush_textbuffer(void) {
 		}
 	}
 }
+
+void clear_textbuffer(void) {
+    int l, c;
+    for (l = 0; l < 4; ++l) {
+        for (c = 0; c < 16; ++c) {
+            textbuffer[l][c] = ' ';
+        }
+    }
+}

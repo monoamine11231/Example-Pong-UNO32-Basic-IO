@@ -102,11 +102,6 @@ void _on_bootstrap() {
 	spi_send_recv(0xAF);
 
     /* CLEAR TEXT BUFFER!! */
-    int l, c;
-    for (l = 0; l < 4; ++l) {
-        for (c = 0; c < 16; ++c) {
-            textbuffer[l][c] = ' ';
-        }
-    }
+	clear_textbuffer();
     flush_textbuffer();
 }
