@@ -2,6 +2,7 @@
 #include "gui.h"
 #include "engine.h"
 #include "drivers/display.h"
+#include "drivers/i2c.h"
 #include "sys_utils.h"
 
 
@@ -9,7 +10,6 @@
 
 int main() {
     enum engine_state state = START_MENU;
-
     for (;;) {
         switch (state)
         {

@@ -44,7 +44,7 @@ uint8_t i2c_receive_u8(void) {
     i2c_wait_until_idle();
     /* Set I2COV to 0 */
     I2C1STATCLR = (1 << 6);
-    return I2C1STATCLR;
+    return I2C1RCV;
 }
 
 void i2c_send_acknowledge(void) {

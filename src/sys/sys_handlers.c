@@ -135,13 +135,13 @@ void _on_bootstrap() {
 
 	/* Reset I2C */
 	I2C1CON = 0x00;
+	/* Set I2C BRG for approximately 100kHz, 80MHz on SCL */
+	I2C1BRG = 0x186;
 	I2C1STAT = 0x00;
-	/* Enable I2C */
-	I2C1CONSET = (1 << 15);
 	/* Stop I2C when idle*/
 	I2C1CONSET = (1 << 13);
-	/* Set I2C BRG for approximately 100kHz on SCL */
-	I2C1BRG = 0x186;
+	/* Enable I2C */
+	I2C1CONSET = (1 << 15);
 	/* Flush I2C receive buffer */
 	int tmp = I2C1RCV;
 }
