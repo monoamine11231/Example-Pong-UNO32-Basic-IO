@@ -1,0 +1,5 @@
+.vscode/**
+pong.elf
+pong.hex
+*.c.d
+*.c.o
