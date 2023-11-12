@@ -2,7 +2,7 @@
 #include "gui.h"
 #include "engine.h"
 #include "drivers/display.h"
-#include "drivers/i2c.h"
+#include "drivers/eeprom.h"
 #include "sys_utils.h"
 
 
