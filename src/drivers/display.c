@@ -51,11 +51,34 @@ void put_text(int offx, int offy, char *string) {
 
 		int k;
 		for (k = 0; k < rest; ++k) {
-        	video[(offy/8)*128+cur+k] = font[(*c)*8+k]; 
+        	video[16*TRIM(offy,8)+cur+k] = font[(*c)*8+k]; 
 		}
     }
 }
 
+void put_digit(int offx, int offy, int x) {
+    if (offy > 24 || offy < 0 || offx < 0 || offx > 120) {
+        return;
+    }
+
+    if (!x) {
+        int k;
+        for (k = 0; k < 8; ++k) {
+            video[16*TRIM(offy,8)+offx+k] = font['0'*8+k];
+        }
+    }
+
+    int cur = offx;
+    while (x > 0) {
+        int k;
+        for (k = 0; k < 8; ++k) {
+            video[16*TRIM(offy,8)+cur+k] = font[((x%10)+'0')*8+k];
+        }
+
+        cur -= 8;
+        x /= 10;
+    }
+}
 
 void text_border(int offx, int offy, int dx) {
     if (offy > 24 || offy < 0 || offx < 0 || offx >= 128 || offx+dx >= 128) {
