@@ -3,6 +3,8 @@
 #include "sys_utils.h"
 
 
+int errno;
+
 #define EXIT_LOOP for(;;) {}
 
 /* Non maskable handler */
