@@ -9,6 +9,7 @@ void put_text(int line, int offset, char *string);
 /* Draw a text border for a text at a given line, offset and given length */
 void text_border(int line, int offset, int length);
 
+void put_box(int x, int y, int width, int height);
 
 uint8_t video[128*4];
 
