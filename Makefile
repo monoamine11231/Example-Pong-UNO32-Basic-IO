@@ -9,9 +9,9 @@ TTYBAUD		?=115200
 PROGNAME	= pong
 
 # Compiler and linker flags
-CFLAGS		+= -Iinclude -nostdlib -ffreestanding -march=mips32r2 -msoft-float -Wa,-msoft-float
+CFLAGS		+= -Iinclude -ffreestanding -march=mips32r2 -msoft-float -Wa,-msoft-float
 ASFLAGS		+= -msoft-float
-LDFLAGS		+= -T $(LINKSCRIPT)
+LDFLAGS		+= -lm -T $(LINKSCRIPT)
 
 # Filenames
 ELFFILE		= $(PROGNAME).elf

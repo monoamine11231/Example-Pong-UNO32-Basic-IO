@@ -6,7 +6,7 @@
 #include "debug.h"
 
 
-void render_game_ai_difficulty(enum engine_state *state) {
+void render_menu_ai_difficulty(enum engine_state *state) {
     struct io_shield_input st;
     /* If selected right */
     int selected = 0x00;
@@ -34,7 +34,8 @@ void render_game_ai_difficulty(enum engine_state *state) {
         selected += st.btn2;
         selected %= 3;
 
-        selected += st.btn3;
+        selected -= st.btn3;
+        selected = (selected < 0) ? 2 : selected;
         selected %= 3;
 
         put_text(12, 0, "AI DIFFICULTY?");

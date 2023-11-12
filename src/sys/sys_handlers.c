@@ -109,6 +109,7 @@ void _on_bootstrap() {
 	clear_video();
 	flush_video();
 
+	/* INITIALIZE ANALOG -> DIGITAL POTENTIOMETER */
 	TRISFSET = 0x02;
 	TRISDSET = (0b1111111 << 5);
 
@@ -135,7 +136,7 @@ void _on_bootstrap() {
 
 	/* Reset I2C */
 	I2C1CON = 0x00;
-	/* Set I2C BRG for approximately 100kHz, 80MHz on SCL */
+	/* Set I2C BRG for approximately 100kHz I2C bus (SCL), on 80MHz peripheral clock speed */
 	I2C1BRG = 0x186;
 	I2C1STAT = 0x00;
 	/* Stop I2C when idle*/
