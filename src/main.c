@@ -6,28 +6,34 @@
 #include "sys_utils.h"
 
 
-#define EXIT_LOOP for(;;) {}
 
 int main() {
-    enum engine_state state = MENU_GLOBAL;
+    _ENGINE_STATE = MENU_GLOBAL;
+    _GAME_SCORE = 0x00;
+
     for (;;) {
-        switch (state)
+        switch (_ENGINE_STATE)
         {
         case MENU_GLOBAL:
-            render_menu_global(&state);
+            render_menu_global();
             break;
         case MENU_PLAYERS:
-            render_menu_players(&state);
+            render_menu_players();
             break;
         case MENU_AI_DIFFICULTY:
-            render_menu_ai_difficulty(&state);
+            render_menu_ai_difficulty();
             break;
         case GAME_START_TWO_PLAYERS:
         case GAME_START_AI_EASY:
         case GAME_START_AI_MEDIUM:
         case GAME_START_AI_HARD:
-            render_pong_game(&state);
+            render_pong_game();
             break;
+        case GAME_END_TWO_PLAYERS:
+        case GAME_END_AI:
+            render_menu_end();
+            break;
+
         default:
             print_error();
             break;

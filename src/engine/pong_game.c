@@ -7,6 +7,7 @@
 
 #include <math.h>
 
+
 /* The bounce dispersion constant which increases the refracted angle
  * for each pixel where the ball hit from the board's middle point
  */
@@ -64,20 +65,20 @@ static int _board_ball_colision(struct board *board, struct ball *ball, int *d,
               (r1y <= (r2y + r2h)) );
 }
 
-void render_pong_game(enum engine_state *state) {
+void render_pong_game() {
     struct io_shield_input st;
     struct board boards[2];
     struct ball ball;
     
     int score = 0;
     int ai_mode = 0;
-    ai_mode |= (*state==GAME_START_AI_EASY);
-    ai_mode |= (*state==GAME_START_AI_MEDIUM);
-    ai_mode |= (*state==GAME_START_AI_HARD);
+    ai_mode |= (_ENGINE_STATE==GAME_START_AI_EASY);
+    ai_mode |= (_ENGINE_STATE==GAME_START_AI_MEDIUM);
+    ai_mode |= (_ENGINE_STATE==GAME_START_AI_HARD);
     
     /* How fast will the AI board respond to the ball's y axis change? */
     float ai_response = 0.0f;
-    switch (*state)
+    switch (_ENGINE_STATE)
     {
     case GAME_START_AI_EASY:
         ai_response = 0.3f;
@@ -143,7 +144,13 @@ void render_pong_game(enum engine_state *state) {
 
         /* If hit the left or right screen walls => game over */
         if ((((int)(ball.x)+ball.size-1) == 128) || ((int)ball.x == 0)) {
-            *state = MENU_GLOBAL;
+            if (ai_mode) {
+                _ENGINE_STATE = GAME_END_AI;
+                _GAME_SCORE = score;
+                break;
+            }
+            _ENGINE_STATE = GAME_END_TWO_PLAYERS;
+            _GAME_SCORE = score;
             break;
         }
 
