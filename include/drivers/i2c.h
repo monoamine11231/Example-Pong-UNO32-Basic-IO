@@ -1,5 +1,5 @@
-#ifndef INCLUDE_I2C_H
-#define INCLUDE_I2C_H
+#ifndef INCLUDE_DRIVERS_I2C_H
+#define INCLUDE_DRIVERS_I2C_H
 
 #include <stdint.h>
 

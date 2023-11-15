@@ -1,3 +1,6 @@
+#ifndef INCLUDE_DRIVERS_IO_H
+#define INCLUDE_DRIVERS_IO_H
+
 struct io_shield_input {
     int btn1;
     int btn2;
@@ -13,3 +16,5 @@ struct io_shield_input {
 };
 
 void source_io_shield_inputs(struct io_shield_input *st);
+
+#endif

@@ -1,3 +1,7 @@
+#ifndef INCLUDE_DRIVERS_DISPLAY_H
+#define INCLUDE_DRIVERS_DISPLAY_H
+
+
 #include <stdint.h>
 
 void set_display_config(int page, int offset);
@@ -15,3 +19,5 @@ void put_box(int x, int y, int width, int height);
 uint8_t video[128*4];
 
 extern const uint8_t const font[128*8];
+
+#endif
