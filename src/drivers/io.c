@@ -18,4 +18,5 @@ void source_io_shield_inputs(struct io_shield_input *st) {
     while(!(AD1CON1 & (0x1 << 1)));
     while(!(AD1CON1 & 0x1));
 
+    st->pot     = ADC1BUF0;
 }

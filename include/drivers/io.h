@@ -8,6 +8,8 @@ struct io_shield_input {
     int sw2;
     int sw3;
     int sw4;
+
+    int pot;
 };
 
 void source_io_shield_inputs(struct io_shield_input *st);
