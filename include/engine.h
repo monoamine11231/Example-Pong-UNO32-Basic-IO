@@ -12,13 +12,20 @@ enum engine_state {
     GAME_START_AI_EASY,
     GAME_START_AI_MEDIUM,
     GAME_START_AI_HARD,
-    GAME_END  
+    
+    GAME_END_TWO_PLAYERS,
+    GAME_END_AI
 };
 
-void render_menu_global(enum engine_state *state);
-void render_menu_players(enum engine_state *state);
-void render_menu_ai_difficulty(enum engine_state *state);
+int _GAME_SCORE;
+enum engine_state _ENGINE_STATE;
 
-void render_pong_game(enum engine_state *engine);
+void render_menu_global();
+void render_menu_players();
+void render_menu_ai_difficulty();
+
+void render_pong_game();
+
+void render_menu_end();
 
 #endif
