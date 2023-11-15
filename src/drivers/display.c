@@ -51,7 +51,7 @@ void put_text(int offx, int offy, char *string) {
 
 		int k;
 		for (k = 0; k < rest; ++k) {
-        	video[16*TRIM(offy,8)+cur+k] = font[(*c)*8+k]; 
+        	video[16*TRIM(offy,8)+cur+k] |= font[(*c)*8+k]; 
 		}
     }
 }
@@ -64,7 +64,7 @@ void put_digit(int offx, int offy, int x) {
     if (!x) {
         int k;
         for (k = 0; k < 8; ++k) {
-            video[16*TRIM(offy,8)+offx+k] = font['0'*8+k];
+            video[16*TRIM(offy,8)+offx+k] |= font['0'*8+k];
         }
     }
 
@@ -72,7 +72,7 @@ void put_digit(int offx, int offy, int x) {
     while (x > 0) {
         int k;
         for (k = 0; k < 8; ++k) {
-            video[16*TRIM(offy,8)+cur+k] = font[((x%10)+'0')*8+k];
+            video[16*TRIM(offy,8)+cur+k] |= font[((x%10)+'0')*8+k];
         }
 
         cur -= 8;
@@ -89,23 +89,23 @@ void text_border(int offx, int offy, int dx) {
 	if (offy > 8) {
 		int i;
 		for (i = 0; i < dx; ++i) {
-			video[128*((offy-8)/8)+offx+i] = 0x80;
+			video[128*((offy-8)/8)+offx+i] |= 0x80;
 		}
 	}
 
 	if (offy + 8 < 32) {
 		int i;
 		for (i = 0; i < dx; ++i) {
-			video[128*((offy+8)/8)+offx+i] = 0x01;
+			video[128*((offy+8)/8)+offx+i] |= 0x01;
 		}
 	}
 
 	if (offx > 0) {
-		video[128*(offy/8)+offx-1] = 0xFF;
+		video[128*(offy/8)+offx-1] |= 0xFF;
 	}
 
 	if (offx+dx < 128) {
-		video[128*(offy/8)+offx+dx] = 0xFF;
+		video[128*(offy/8)+offx+dx] |= 0xFF;
 	}
 }
 
@@ -122,7 +122,7 @@ void put_box(int x, int y, int width, int height) {
 
         int i;
         for (i = 0; i < width; ++i) {
-            video[16*TRIM(y, 8)+x+i] = upper_board;
+            video[16*TRIM(y, 8)+x+i] |= upper_board;
         }
     }
 
@@ -133,7 +133,7 @@ void put_box(int x, int y, int width, int height) {
     for (; i < TRIM(y+height, 8); i += 8) {
         int j;
         for (j = 0; j < width; ++j) {
-            video[16*TRIM(i, 8)+x+j] = 0xFF;
+            video[16*TRIM(i, 8)+x+j] |= 0xFF;
         }
     }
 
@@ -144,7 +144,7 @@ void put_box(int x, int y, int width, int height) {
     if (!(y & 0x07) && height < 8) {
         int i;
         for (i = 0; i < width; ++i) {
-            video[16*TRIM(y, 8)+x+i] = (1<<height)-1;
+            video[16*TRIM(y, 8)+x+i] |= (1<<height)-1;
         }
     }
 
@@ -158,7 +158,7 @@ void put_box(int x, int y, int width, int height) {
 
         int i;
         for (i = 0; i < width; ++i) {
-            video[16*TRIM(y+height, 8)+x+i] = lower_board;
+            video[16*TRIM(y+height, 8)+x+i] |= lower_board;
         }
     }
 }
