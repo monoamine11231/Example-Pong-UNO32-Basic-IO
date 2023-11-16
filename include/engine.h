@@ -17,15 +17,25 @@ enum engine_state {
     GAME_END_AI
 };
 
+struct highscore_entry {
+    /* Don't forget the NULL byte at the end */
+    char name[7];
+    int score;
+};
+
+
 int _GAME_SCORE;
 enum engine_state _ENGINE_STATE;
 
 void render_menu_global();
+void render_menu_highscore();
+
 void render_menu_players();
 void render_menu_ai_difficulty();
 
 void render_pong_game();
 
-void render_menu_end();
+void render_menu_end_two_players();
+void render_menu_end_ai();
 
 #endif

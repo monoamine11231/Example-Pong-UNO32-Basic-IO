@@ -1,5 +1,6 @@
 #include "gui.h"
 
+#include <pic32mx.h>
 #include <string.h>
 #include "drivers/io.h"
 #include "drivers/display.h"
@@ -39,6 +40,10 @@ void __gui_instance_io_handler(struct gui_instance *instance) {
             _SINGLETON_GUI_EXIT_SIGNAL = select->on_select(instance, select, &st);
         }
 
+        if (_SINGLETON_GUI_EXIT_SIGNAL) {
+            break;
+        }
+
         if (!select->writable) {
             break;
         }
@@ -70,6 +75,14 @@ void __gui_instance_io_handler(struct gui_instance *instance) {
         instance->mode = CHOOSE;
         break;
     case PAGE_SCROLL:
+        instance->page_offset += _PAGE_SCROLL_PX*st.btn2;
+        instance->page_offset -= _PAGE_SCROLL_PX*st.btn3;
+
+        instance->page_offset = MOD(instance->page_offset, instance->page_max_offset);
+
+
+        /* Exit on BTN1 */
+        _SINGLETON_GUI_EXIT_SIGNAL = st.btn1;
         break;
     default:
         break;
@@ -79,35 +92,54 @@ void __gui_instance_io_handler(struct gui_instance *instance) {
 void __gui_instance_render(struct gui_instance *instance) {
     clear_video();
     int i;
-    for (i = 0; i < instance->texts_size; ++i) {
-        put_text(instance->texts[i].x, instance->texts[i].y, instance->texts[i].text);
-    }
-
 
     struct gui_select *select, *field;
 
     switch (instance->mode) {
     case CHOOSE:
-        select = &instance->selects[instance->select_index];
+        for (i = 0; i < instance->texts_size; ++i) {
+            put_text(instance->texts[i].x, instance->texts[i].y, instance->texts[i].text);
+        }
+
         for (i = 0; i < instance->selects_size; ++i) {
             put_text(instance->selects[i].text.x, instance->selects[i].text.y,
                      instance->selects[i].text.text);
         }
 
+        select = &instance->selects[instance->select_index];
+
         /* Each character is 8 pixels */
         text_border(select->text.x, select->text.y, select->text.length*8);
         break;
     case WRITE_FIELD:
-        field = &instance->selects[instance->select_index];
+        for (i = 0; i < instance->texts_size; ++i) {
+            put_text(instance->texts[i].x, instance->texts[i].y, instance->texts[i].text);
+        }
+
         for (i = 0; i < instance->selects_size; ++i) {
             put_text(instance->selects[i].text.x, instance->selects[i].text.y,
                      instance->selects[i].text.text);
         }
+
+        field = &instance->selects[instance->select_index];
+
         /* Draw a underline on the selected character in that field */
         put_box(field->text.x+8*instance->field_write_char_index,
                 field->text.y+8, 8, 1);      
         break;
     case PAGE_SCROLL:
+        for (i = 0; i < instance->texts_size; ++i) {
+            put_text(instance->texts[i].x, instance->texts[i].y-instance->page_offset,
+                     instance->texts[i].text);
+        }
+
+        /* Selectables are non-selectable in page mode. Page mode is just view mode */
+        for (i = 0; i < instance->selects_size; ++i) {
+            put_text(instance->selects[i].text.x,
+                     instance->selects[i].text.y-instance->page_offset,
+                     instance->selects[i].text.text);
+        }
+
         break;
     default:
         break;
@@ -121,6 +153,10 @@ void gui_instance_loop(struct gui_instance *instance) {
         if (_SINGLETON_GUI_EXIT_SIGNAL) {
             /* Reset to false automatically */
             _SINGLETON_GUI_EXIT_SIGNAL = 0x00;
+            if (instance->on_exit) {
+                instance->on_exit(instance);
+            }
+
             break;
         }
 

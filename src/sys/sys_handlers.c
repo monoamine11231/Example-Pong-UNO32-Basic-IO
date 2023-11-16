@@ -1,6 +1,11 @@
-#include <stdint.h>
-#include <pic32mx.h>
 #include "sys_utils.h"
+
+#include <stdint.h>
+#include <string.h>
+#include <pic32mx.h>
+
+#include "engine.h"
+#include "drivers/eeprom.h"
 
 
 int errno;
@@ -147,4 +152,33 @@ void _on_bootstrap() {
 	I2C1CONSET = (1 << 15);
 	/* Flush I2C receive buffer */
 	int tmp = I2C1RCV;
+	quicksleep(100000);
+
+
+	/* Read the first highscore entry from the EEPROM memory */
+	struct highscore_entry entry;
+	eeprom_read_struct(&entry, sizeof(struct highscore_entry), 0);
+
+	/* if `memcmp` returns 0, it means that both parameters are equal */
+	if (entry.score == INT32_MAX) {
+		goto _on_bootstrap_end;
+	}
+
+	/* Dump the first identifying entry which says that an area of 10
+	 * highscore entries were zeroed out, and then wipe the remaining
+	 * 10 highscore entries
+	 */
+    entry.score = INT32_MAX;
+	eeprom_dump_struct(&entry, sizeof(struct highscore_entry), 0);
+
+	/* Fill out the zeroed entry struct */
+	entry.score = 0;
+	memset(&entry.name[0], ' ', 6);
+	entry.name[6] = '\0';
+	int i;
+	for (i = 0; i < 10; ++i) {
+		eeprom_dump_struct(&entry, sizeof(struct highscore_entry), i+1);
+	}	
+	_on_bootstrap_end:
+	asm("nop");
 }

@@ -49,6 +49,8 @@ void render_menu_global() {
     instance.field_index = -1;
     instance.field_write_char_index = -1;
 
+    instance.on_exit = NULL;
+
     instance.mode = CHOOSE;
 
     gui_instance_loop(&instance);

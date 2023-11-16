@@ -1,16 +1,54 @@
 #include "engine.h"
 
 #include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "gui.h"
 #include "drivers/io.h"
+#include "drivers/eeprom.h"
 #include "sys_utils.h"
 
+
+static int highscore_entry_cmp(const void *a, const void *b) {
+    return ((struct highscore_entry*)b)->score - ((struct highscore_entry*)a)->score;
+}
 
 /* This function is runned when the "Ok" option is pressed */
 static int ok_on_select(struct gui_instance *instance, struct gui_select *element,
                         struct io_shield_input *io) {
+    /* Exit to the main menu */
     _ENGINE_STATE = MENU_GLOBAL;
+    if (_GAME_SCORE <= 0) {
+        _GAME_SCORE = 0x00;
+        return GUI_EXIT;
+    }
+
+    /* Fetch all the highscore entries stored in EEPROM */
+    struct highscore_entry entries[12];
+    int i;
+    for (i = 0; i < 10; ++i) {
+        /* The first entry must have a score of INT_MAX which identifies
+         * that the EEPROM area was zeroed for 10 highscore entries
+         */
+        eeprom_read_struct(&entries[i], sizeof(struct highscore_entry), i+1);
+    }
+
+    /* Add the current end game entries so that they can be sorted and don't
+     * forget about the null bytes
+     */
+    memcpy(&entries[10].name[0], &instance->selects[0].text.text[0], 7);
+    entries[10].score = _GAME_SCORE;
+    memcpy(&entries[11].name[0], &instance->selects[1].text.text[0], 7);
+    entries[11].score = _GAME_SCORE;
+
+    /* Sort the 12 entries including the new ones and store them in EEPROM */
+    qsort(&entries[0], 12, sizeof(struct highscore_entry), highscore_entry_cmp);
+    for (i = 0; i < 10; ++i) {
+        eeprom_dump_struct(&entries[i], sizeof(struct highscore_entry), i+1);
+    }
+
+    _GAME_SCORE = 0x00;
     return GUI_EXIT;
 }
 
@@ -31,7 +69,7 @@ static int field_on_write(struct gui_instance *instance, struct gui_select *elem
 }
 
 
-void render_menu_end() {
+void render_menu_end_two_players() {
     struct gui_text title;
     init_text(&title, 18, 0, "YOUR NAME?");
 
@@ -62,6 +100,8 @@ void render_menu_end() {
     instance.select_index = 0x00;
     instance.field_index = -1;
     instance.field_write_char_index = -1;
+
+    instance.on_exit = NULL;
 
     instance.mode = CHOOSE;
 

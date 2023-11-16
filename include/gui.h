@@ -5,8 +5,11 @@
 
 #include "drivers/io.h"
 
+
 #define GUI_CONTINUE 0
 #define GUI_EXIT 1
+
+#define _PAGE_SCROLL_PX 8
 
 /* If 1, the gui loop (`gui_instance_loop`) should be terminated. */
 int _SINGLETON_GUI_EXIT_SIGNAL;
@@ -52,6 +55,11 @@ struct gui_instance {
 
     int field_index;
     int field_write_char_index;
+
+    int page_offset;
+    int page_max_offset;
+
+    void (*on_exit)(void*);
 
     enum gui_instance_mode mode;
 };

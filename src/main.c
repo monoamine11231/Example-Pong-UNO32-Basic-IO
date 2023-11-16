@@ -1,4 +1,7 @@
 #include <pic32mx.h>
+
+
+#include <string.h>
 #include "gui.h"
 #include "engine.h"
 #include "drivers/display.h"
@@ -6,8 +9,11 @@
 #include "sys_utils.h"
 
 
-
 int main() {
+    struct highscore_entry i, j;
+    i.score = 0x00;
+    // eeprom_dump_struct(&i, sizeof(struct highscore_entry), 0);
+
     _ENGINE_STATE = MENU_GLOBAL;
     _GAME_SCORE = 0x00;
 
@@ -16,6 +22,9 @@ int main() {
         {
         case MENU_GLOBAL:
             render_menu_global();
+            break;
+        case MENU_HIGHSCORE:
+            render_menu_highscore();
             break;
         case MENU_PLAYERS:
             render_menu_players();
@@ -30,8 +39,10 @@ int main() {
             render_pong_game();
             break;
         case GAME_END_TWO_PLAYERS:
+            render_menu_end_two_players();
+            break;
         case GAME_END_AI:
-            render_menu_end();
+            render_menu_end_ai();
             break;
 
         default:

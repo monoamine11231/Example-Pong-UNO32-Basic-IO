@@ -34,6 +34,7 @@ int i2c_send_u8(uint8_t value) {
     I2C1TRN = value;
     i2c_wait_until_idle();
 
+    /* If received not acknowledge return 0, otherwise 1 */
     return !(I2C1STAT & (1 << 15));
 }
 
