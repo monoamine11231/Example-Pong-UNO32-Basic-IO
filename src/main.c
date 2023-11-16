@@ -10,8 +10,10 @@
 
 
 int main() {
-    struct highscore_entry i, j;
-    i.score = 0x00;
+    struct highscore_entry i = {
+        .name = {' ', ' ', ' ', ' ', ' ', ' ', '\0'},
+        .score = 0x00
+    };
     // eeprom_dump_struct(&i, sizeof(struct highscore_entry), 0);
 
     _ENGINE_STATE = MENU_GLOBAL;

@@ -17,11 +17,14 @@ enum engine_state {
     GAME_END_AI
 };
 
+
 struct highscore_entry {
     /* Don't forget the NULL byte at the end */
     char name[7];
     int score;
-};
+
+    char _padding[53]; /* Pad to 64 bytes since a EEPROM page is 64 bytes */
+} __attribute__((__packed__));
 
 
 int _GAME_SCORE;

@@ -107,7 +107,7 @@ void render_pong_game() {
     ball.size = 2;
     ball.dx = -1;
     ball.dy = 0;
-    ball.speed = 1;
+    ball.speed = 1.0f;
 
     for (;;) {
         clear_video();
@@ -169,6 +169,8 @@ void render_pong_game() {
             ball.dx /= _norm;
             ball.dy /= _norm;
             ++score;
+
+            ball.speed += 0.1f;
         }
 
         if (_board_ball_colision(&boards[1], &ball, &d, &vertically_hit)) {
@@ -181,6 +183,9 @@ void render_pong_game() {
             ball.dx /= _norm;
             ball.dy /= _norm;
             ++score;
+
+            ball.speed += 0.1f;
+
         }
 
         ball.x += ball.speed*ball.dx;
