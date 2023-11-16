@@ -96,7 +96,7 @@ void render_pong_game() {
 
     boards[0].x = 0;
     boards[0].y = 0;
-    boards[0].width = 16;
+    boards[0].width = 10;
 
     boards[1].x = 126;
     boards[1].y = 15;
@@ -170,7 +170,7 @@ void render_pong_game() {
             ball.dy /= _norm;
             ++score;
 
-            ball.speed += 0.1f;
+            ball.speed += 0.03f;
         }
 
         if (_board_ball_colision(&boards[1], &ball, &d, &vertically_hit)) {
@@ -184,7 +184,7 @@ void render_pong_game() {
             ball.dy /= _norm;
             ++score;
 
-            ball.speed += 0.1f;
+            ball.speed += 0.03f;
 
         }
 
