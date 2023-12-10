@@ -12,6 +12,10 @@ void eeprom_reset() {
 }
 
 void eeprom_dump_struct(const void *src, int st_size, int index) {
+    if (st_size != 64) {
+        return;
+    }
+    
     int acknowledge;
     do {
         i2c_start();
@@ -34,7 +38,7 @@ void eeprom_dump_struct(const void *src, int st_size, int index) {
 }
 
 void eeprom_read_struct(void *dest, int st_size, int index) {
-    if (st_size <= 0) {
+    if (st_size != 64) {
         return;
     }
 
