@@ -15,6 +15,14 @@
 int _SINGLETON_GUI_EXIT_SIGNAL;
 
 
+/* Forward declarations of the structs for no strange behaviour with
+ * function pointers which are members of the structs.
+ */
+struct gui_instance;
+struct gui_select;
+struct gui_text;
+
+
 struct gui_text {
     int x;
     int y;
@@ -34,8 +42,8 @@ struct gui_select {
      * `struct gui_select*` but `struct gui_select` is not defined
      * at this point of the program.
      */
-    int (*on_select)(void*, void*, struct io_shield_input*);
-    int (*on_write)(void*, void*, struct io_shield_input*);
+    int (*on_select)(struct gui_instance*, struct gui_select*, struct io_shield_input*);
+    int (*on_write)(struct gui_instance*, struct gui_select*, struct io_shield_input*);
 };
 
 enum gui_instance_mode {
@@ -59,7 +67,7 @@ struct gui_instance {
     int page_offset;
     int page_max_offset;
 
-    void (*on_exit)(void*);
+    void (*on_exit)(struct gui_instance*);
 
     enum gui_instance_mode mode;
 };
