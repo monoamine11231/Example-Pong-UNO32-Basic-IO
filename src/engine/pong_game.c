@@ -159,7 +159,7 @@ void render_pong_game() {
             ball.x += 1.0f;
             ball.dx *= -1;
             ball.dy += (((float)d)/((float)boards[0].width))*kBounceDispersion;
-            ball.dy = (vertically_hit) ? ball.dy*10 : ball.dy;
+            // ball.dy = (vertically_hit) ? ball.dy*10 : ball.dy;
 
 
             /* The velocity vector was changed with a length > 1, and it needs
